@@ -1,0 +1,17 @@
+project:
+  name: Obitanus Abitonus
+  description: A simple LaTeX template for obituaries
+  github: https://github.com/kvn-dtrx/obitanus-abitonus
+  authors:
+    - name: Kvn Dtrx
+      mail: kvn.dtrx+git@protonmail.ch
+
+resources:
+  license:
+    type: MIT
+    year: 2025
+  gitignore:
+    includes: ["base", "latex"]
+  latexmkrc:
+    includes: ["base", "lualatex"]
+    parent: tex
