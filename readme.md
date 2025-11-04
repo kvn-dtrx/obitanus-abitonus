@@ -8,7 +8,7 @@ This repository contains a simple LaTeX template for obituaries.
 
 ### Nomen est nomen …
 
-The term *Obitanus Abitonus* originates from the ludic Latin proverb "Obit anus, abit onus"; its popularisation appears to be mainly associated with the German philosopher [Arthur Schopenhauer](https://en.wikiquote.org/wiki/Arthur_Schopenhauer). As one might guess, the word *obituary* derives also from *obire*.
+The term *Obitanus Abitonus* originates from the ludic Latin proverb "Obit anus, abit onus"; its popularisation appears to be mainly associated with the German philosopher [Arthur Schopenhauer](https://en.wikiquote.org/wiki/Arthur_Schopenhauer). As one might guess, the word *obituary* derives also from *obire* ("to go towards (death)").
 
 ## Preliminaries
 
