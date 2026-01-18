@@ -1,10 +1,27 @@
+# ---
+# begin: .latexmkrc <- dia-project
+# ---
+
+# ---
+
 # Base
 
-# Output directory for PDF and other build artifacts.
-$out_dir = '../build';
+use Cwd 'abs_path';
+use File::Basename;
+
+my $script_path = abs_path(__FILE__);
+my $script_dir = dirname($script_path);
+$project_dir = `git -C "$script_dir" rev-parse --show-toplevel 2>/dev/null`;
+chomp($project_dir);
+
+# Output directory for PDF and other build artefacts.
+$out_dir = '.';
 
 # Output directory for auxiliary files.
-$aux_dir = '../build';
+$aux_dir = '.';
+
+# LaTeX engine: 1 = pdflatex, 4 = lualatex, 5 = xelatex
+$pdf_mode = 4;
 
 # Bibliography mode: # 0=off, 1=bibtex, 2=auto-detect (bibtex/biber).
 $bibtex_use = 2;
@@ -30,16 +47,22 @@ $silence_logfile_warnings = 1;
 
 # TEXINPUTS (List of directories to look for TeX files).
 $ENV{'TEXINPUTS'} = join(':', (
-    './/',
-    '../src//',
-    '../config//',
+    # Includes current directory.
+    '.',
+    # Includes some standard directories recursively (double slash!).
+    $project_dir . '//',
+    # 'assets//',
+    # 'classes//',
+    # '../src//',
+    # 'styles//',
     # Preserves existing directories.
     $ENV{'TEXINPUTS'} // '',
 ));
 
+
 # BIBINPUTS (List of directories to look for BibTeX files).
 $ENV{'BIBINPUTS'} = join(':', (
-    # Includes styles directory recursively (double slash!).
+    # Includes bib directory recursively (double slash!).
     'bib//',
     # Preserves existing directories.
     $ENV{'BIBINPUTS'} // '',
@@ -53,8 +76,6 @@ my @my_clean_ext = (
     'aux',
     'bbl',
     'bbl-SAVE-ERROR',
-    '*.bcf',
-    '*.bcf-SAVE-ERROR',
     'blg',
     'fdb_latexmk',
     'fls',
@@ -100,7 +121,6 @@ push @generated_exts, @more_generated_exts;
 
 # ---
 
-# LuaLaTeX
-
-# LaTeX engine: 1 = pdflatex, 4 = lualatex, 5 = xelatex
-$pdf_mode = 4;
+# ---
+# end: .latexmkrc <- dia-project
+# ---

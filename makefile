@@ -1,48 +1,54 @@
-.PHONY: help render compile build clean reset rebuild
-
-help: ## Shows this help
-	@echo "Available targets for make:"
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
-	awk 'BEGIN {FS = ":.*?## "}; {printf "  %-13s: %s\n", $$1, $$2}'
+# ---
+# title: Makefile for obitanus-abitonus
+# ---
 
 # ---
 
-SRC:=$(wildcard src/*)
-PACKAGES:=$(patsubst src/%,%,$(SRC))
-TEXMF:=$(HOME)/Library/texmf
-TARGET:=$(TEXMF)/tex/latex
+TEXMF:=$(shell kpsewhich -var-value=TEXMFHOME)
+DST:=$(TEXMF)/tex/latex
+EXAMPLES:=examples/
+
+.PHONY: help ln rm render compile build clean reset rebuild
+
+help: ## Displays available targets with description
+	@printf "Available targets for make:\n"
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+		awk 'BEGIN {FS = ":.*?## "}; {printf "  %-13s: %s\n", $$1, $$2}'
+
+# ---
+
+# Package installation/removal
 
 ln: ## Symlinks package into TEXMF
-	@mkdir -p $(TARGET)
-	@for package in $(PACKAGES); do \
-		ln -sf "$$(realpath src/$$package)" "$(TARGET)/"; \
+	@mkdir -p "$(DST)"
+	@for package in src/*/; do \
+		ln -sf "$${package}" "$(DST)/"; \
 	done
-# 	Not strictly necessary; however, it does not harm.
-	texhash "$(TEXMF)"
+
+cp: ## Copies package into TEXMF
+	@mkdir -p "$(DST)"
+	@for package in src/*/; do \
+		cp -r "$${package}" "$(DST)/"; \
+	done
 
 rm: ## Removes package from TEXMF
-	@for package in $(PACKAGES); do \
-		rm -r "$(TARGET)/$$(basename $$package)"; \
+	@for package in src/*/; do \
+		rm -r "$(DST)/$$(basename "$${package}")/"; \
 	done
-# 	Not strictly necessary; however, it does not harm.
-	texhash $(TEXMF)
 
 # ---
 
-TEX:=tex
-
-# render: ## Fills template with supplied data
-# 	@./scripts/render.py --template config/main.tex.j2 --output-dir $(TEX) config/specs.yaml
+# Example compilation
 
 compile: ## Compiles filled templates
-	@cd $(TEX) && latexmk
+	@cd "$(EXAMPLES)" && latexmk
 
-build: render compile ## Executes render and build
+build: compile ## Compiles filled templates
 
 clean: ## Removes intermediate compilation files
-	@cd $(TEX) && latexmk -c
+	@cd "$(EXAMPLES)" && latexmk -c
 
 reset: ## Resets build directory
-	@cd $(TEX) && latexmk -C
+	@cd "$(EXAMPLES)" && latexmk -C
 
-rebuild: reset render compile ## Executes reset, render and build
+rebuild: reset build ## Executes reset and build
