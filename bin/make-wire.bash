@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-# dia:begin wire/make-wire.bash
+# dia:file wire/make-wire.bash
 
-#!/usr/bin/env bash
 # ---
 # description: >-
 #   Unified wire: reads config/wire.ini from the target repo (sidecar).
@@ -19,6 +18,9 @@
 # Usage: make-wire.bash [mount_name] [repo_dir]
 # Env:   WIRE_MODE overrides ini mode for all selected mounts.
 #        WIRE_HOST selects device overlay paths in from=.
+#
+# Embed: host header is shebang, blank, then dia:file wire/make-wire.bash;
+# body below is the snippet after its shebang.
 
 # ---
 
@@ -1025,5 +1027,3 @@ if [ "${ran}" -eq 0 ]; then
     fi
     exit 1
 fi
-
-# dia:end

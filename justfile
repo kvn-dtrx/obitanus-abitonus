@@ -4,26 +4,42 @@
 
 # ---
 
-examples := "examples"
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+
+root := justfile_directory()
+latexmkrc := root / ".latexmkrc"
+examples := root / "examples"
+build-dir := "build"
 
 # Shows available recipes
 default:
     @just --list --unsorted
 
-# Compiles examples via latexmk
-compile:
-    cd {{examples}} && latexmk
+# Prepares build directory
+prepare:
+    mkdir -p {{build-dir}}
+
+# Compiles all examples/<slug>/main.tex into build/<slug>.pdf
+compile: prepare
+    #!/usr/bin/env bash
+    shopt -s nullglob
+    for main in "{{examples}}"/*/main.tex; do
+        slug="$(basename "$(dirname "${main}")")"
+        latexmk -cd -r "{{latexmkrc}}" -jobname="${slug}" "${main}"
+    done
 
 # Alias for compile
 build: compile
 
-# Removes intermediate compilation files
+# Removes intermediate files; keeps pdf/png/tex
 clean:
-    cd {{examples}} && latexmk -c
+    find {{build-dir}} -mindepth 1 \
+        ! \( -iname "*.pdf" -o -iname "*.png" -o -iname "*.tex" -o -iname ".gitkeep" \) \
+        -delete
 
-# Full clean of examples
+# Wipes build directory except .gitkeep
 reset:
-    cd {{examples}} && latexmk -C
+    find {{build-dir}} -mindepth 1 ! -iname ".gitkeep" -delete
 
 # Resets and rebuilds examples
 rebuild: reset build

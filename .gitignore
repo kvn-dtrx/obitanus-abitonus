@@ -87,8 +87,6 @@ tmp/
 
 # Build directory
 **/build/*
-!**/build/.gitkeep
-
 # Beamer
 *.nav
 *.snm
