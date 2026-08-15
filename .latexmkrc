@@ -98,11 +98,13 @@ else {
 # Texinputs
 
 # Package examples: compile with cwd = examples/<slug>/ (latexmk -cd). Finds
-# local demo files, optional examples/shared/, and package src/.
+# local demo files, optional examples/share/ (legacy examples/shared/), and
+# package src/.
 $ENV{'TEXINPUTS'} = join(
     ':',
     (
         './/',
+        '../share//',
         '../shared//',
         '../../src//',
 
